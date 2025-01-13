@@ -4,7 +4,7 @@ import time
 import os
 import random
 import sys
-
+# get imrpoved supa
 #bug fixed yippie
 def clear_console():
     """
