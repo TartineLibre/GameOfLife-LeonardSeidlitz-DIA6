@@ -221,7 +221,7 @@ def run_game():
         # Get the grid for the next generation
         create_next_grid(rows, cols, current_generation, next_generation)
         # Wait some time
-        time.sleep(1 / 5.0)
+        time.sleep(0.5)
         # Replace the current generation with the new one
         current_generation, next_generation = next_generation, current_generation
 
