@@ -5,7 +5,7 @@ import os
 import random
 import sys
 
-#bug fixed yipie
+#bug fixed yippie
 def clear_console():
     """
     Clears the console using a system command based on the user's operating system.
