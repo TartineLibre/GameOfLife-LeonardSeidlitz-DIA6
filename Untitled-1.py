@@ -12,11 +12,11 @@ def clear_console():
 
     """
 
-    if sys.platform.startswith('win'):
+    if sys.platform.startswith('win'): # Windows
         os.system("cls")
-    elif sys.platform.startswith('linux'):
+    elif sys.platform.startswith('linux'): # Linux
         os.system("clear")
-    elif sys.platform.startswith('darwin'):
+    elif sys.platform.startswith('darwin'): # Darwin
         os.system("clear")
     else:
         print("Unable to clear terminal. Your operating system is not supported.\n\r")
@@ -33,13 +33,13 @@ def resize_console(rows, cols):
     if cols < 32:
         cols = 32
 
-    if sys.platform.startswith('win'):
+    if sys.platform.startswith('win'): # Windows
         command = "mode con: cols={0} lines={1}".format(cols + cols, rows + 5)
         os.system(command)
-    elif sys.platform.startswith('linux'):
+    elif sys.platform.startswith('linux'): # Linux
         command = "\x1b[8;{rows};{cols}t".format(rows=rows + 3, cols=cols + cols)
         sys.stdout.write(command)
-    elif sys.platform.startswith('darwin'):
+    elif sys.platform.startswith('darwin'): # Darwin
         command = "\x1b[8;{rows};{cols}t".format(rows=rows + 3, cols=cols + cols)
         sys.stdout.write(command)
     else:
@@ -61,9 +61,9 @@ def create_initial_grid(rows, cols):
         for col in range(cols):
             # Generate a random number and based on that decide whether to add a live or dead cell to the grid
             if random.randint(0, 7) == 0:
-                grid_rows += [1]
+                grid_rows += [1] # Add live cell
             else:
-                grid_rows += [0]
+                grid_rows += [0] # Add dead cell
         grid += [grid_rows]
     return grid
 
@@ -78,7 +78,7 @@ def print_grid(rows, cols, grid, generation):
     :param generation: Int - The current generation of the Game of Life grid
     """
 
-    clear_console()
+    clear_console() # Clear the console to make sure the output is clean
 
     # A single output string is used to help reduce the flickering caused by printing multiple lines e
     output_str = ""
@@ -88,9 +88,9 @@ def print_grid(rows, cols, grid, generation):
     for row in range(rows):
         for col in range(cols):
             if grid[row][col] == 0:
-                output_str += ". "
+                output_str += ". " # Dead cell
             else:
-                output_str += "@ "
+                output_str += "@ " # Live cell
         output_str += "\n\r"
     print(output_str, end=" ")
 
@@ -136,10 +136,10 @@ def get_live_neighbors(row, col, rows, cols, grid):
     :return: Int - The number of live cells surrounding the cell at grid[row][cell]
     """
 
-    life_sum = 0
+    life_sum = 0 # Sum of live neighbors
     for i in range(-1, 2):
         for j in range(-1, 2):
-            # Make sure to count the center cell located at grid[row][col]
+            # Make sure to not count the center cell located at grid[row][col]
             if not (i == 0 and j == 0):
                 # Using the modulo operator (%) the grid wraps around
                 life_sum += grid[((row + i) % rows)][((col + j) % cols)]
@@ -178,12 +178,12 @@ def get_integer_value(prompt, low, high):
 
     while True:
         try:
-            value = int(input(prompt))
+            value = int(input(prompt)) # Read the input value as an integer
         except ValueError:
             print("Input was not a valid integer value.")
             continue
         if value < low or value > high:
-            print("Input was not inside the bounds (value <= {0} or value >= {1}).".format(low, high))
+            print("Input was not inside the bounds (value < {0} or value > {1}).".format(low, high))
         else:
             break
     return value
@@ -213,11 +213,16 @@ def run_game():
     # Run Game of Life sequence
     gen = 1
     for gen in range(1, generations + 1):
+        # If the grid won't change, no need to keep the simulation running, end it early
         if not grid_changing(rows, cols, current_generation, next_generation):
             break
+        # Display the grid
         print_grid(rows, cols, current_generation, gen)
+        # Get the grid for the next generation
         create_next_grid(rows, cols, current_generation, next_generation)
+        # Wait some time
         time.sleep(1 / 5.0)
+        # Replace the current generation with the new one
         current_generation, next_generation = next_generation, current_generation
 
     print_grid(rows, cols, current_generation, gen)
